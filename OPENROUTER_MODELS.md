@@ -11,7 +11,7 @@ export OPENROUTER_API_KEY="your-api-key-here"
 
 2. Run with OpenRouter and specify a model:
 ```bash
-# Use default model (claude-3.5-sonnet)
+# Use default model (claude-4-sonnet)
 ./run-docker.sh https://example.com --openrouter --sqli
 
 # Specify a different model
@@ -22,9 +22,10 @@ export OPENROUTER_API_KEY="your-api-key-here"
 ## Available Models
 
 ### Anthropic Claude (Recommended for Security Testing)
-- `claude-3.5-sonnet` - **Default** - Excellent balance of speed and intelligence
+- `claude-4-sonnet` - **Default** - Most advanced Claude model for security testing
+- `claude-3.5-sonnet` - Excellent balance of speed and intelligence
 - `claude-3-haiku` - Fast and cost-effective
-- `claude-3-opus` - Most capable Claude model
+- `claude-3-opus` - Most capable Claude 3 model
 
 ### OpenAI GPT
 - `gpt-4o` - Latest GPT-4 with vision support
@@ -55,13 +56,15 @@ export OPENROUTER_API_KEY="your-api-key-here"
 
 ### For SQL Injection Testing
 Recommended models:
-- `claude-3.5-sonnet` - Best for SQL injection analysis
+- `claude-4-sonnet` - **Best** - Most advanced for SQL injection analysis (default)
+- `claude-3.5-sonnet` - Excellent balance of speed and quality
 - `gpt-4o` - Excellent at understanding database contexts
 - `llama3.1-70b` - Good balance of cost and performance
 
 ### For XSS Testing
 Recommended models:
-- `claude-3.5-sonnet` - Excellent at JavaScript/HTML analysis
+- `claude-4-sonnet` - **Best** - Most advanced for JavaScript/HTML analysis (default)
+- `claude-3.5-sonnet` - Excellent for complex XSS scenarios
 - `gpt-4o` - Strong understanding of browser behavior
 - `llama3.1-405b` - Most thorough analysis (slower/costlier)
 
@@ -73,7 +76,8 @@ Budget-friendly models:
 
 ### For Maximum Accuracy
 Most capable models:
-- `claude-3-opus` - Most thorough analysis
+- `claude-4-sonnet` - **Best** - Most advanced Claude model (default)
+- `claude-3-opus` - Most thorough Claude 3 model
 - `gpt-4o` - Latest GPT capabilities
 - `llama3.1-405b` - Largest Llama model
 
@@ -94,14 +98,14 @@ Most capable models:
 ./run-docker.sh https://vulnsite.com --openrouter --model llama3.1-8b --sqli
 ```
 
-### Maximum accuracy with Claude Opus
+### Maximum accuracy with Claude 4 Sonnet (default)
 ```bash
-./run-docker.sh https://vulnsite.com --openrouter --model claude-3-opus --dom --memory
+./run-docker.sh https://vulnsite.com --openrouter --dom --memory
 ```
 
 ## Notes
 
-- If no model is specified, `claude-3.5-sonnet` is used by default
+- If no model is specified, `claude-4-sonnet` is used by default
 - All models support the same API interface
 - Vision models can analyze screenshots (useful for DOM XSS detection)
 - Pricing varies by model - check [OpenRouter pricing](https://openrouter.ai/docs#models) for details

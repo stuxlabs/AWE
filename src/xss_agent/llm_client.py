@@ -15,19 +15,18 @@ def get_llm_client(provider: Optional[str] = None, **kwargs):
 
     Priority:
     1. If provider is explicitly specified, use that
-    2. If OPENROUTER_API_KEY is set, use OpenRouter
-    3. If AWS credentials are set, use Bedrock
-    4. Default to Bedrock
+    2. Default to OpenRouter
+    3. Fall back to Bedrock if OpenRouter fails and AWS credentials are available
 
     Args:
         provider: Optional provider name ('bedrock' or 'openrouter')
         **kwargs: Additional arguments to pass to the client constructor
 
     Returns:
-        Unified LLM client instance (BedrockUnifiedClient or OpenRouterClient)
+        Unified LLM client instance (OpenRouterClient or BedrockUnifiedClient)
 
     Raises:
-        ValueError: If specified provider is not available
+        ValueError: If no LLM client can be initialized
     """
     # Check for explicit provider override
     if provider is None:
@@ -52,26 +51,23 @@ def get_llm_client(provider: Optional[str] = None, **kwargs):
 
     else:
         # Auto-detect based on environment variables
-        # First check for OpenRouter API key
-        if os.environ.get("OPENROUTER_API_KEY"):
-            try:
-                from .openrouter_model import OpenRouterClient
-                print("🔄 Using OpenRouter as LLM provider")
-                return OpenRouterClient(**kwargs)
-            except Exception as e:
-                print(f"⚠️  OpenRouter initialization failed: {e}")
-                print("🔄 Falling back to AWS Bedrock")
-
-        # Default to AWS Bedrock
+        # Default to OpenRouter
         try:
-            from .aws_model import BedrockUnifiedClient
-            # Check if AWS credentials are available
-            if not (os.environ.get("AWS_ACCESS_KEY_ID") or os.environ.get("AWS_PROFILE")):
-                print("⚠️  Warning: No AWS credentials found. Bedrock client may not work.")
-            print("🔄 Using AWS Bedrock as LLM provider")
-            return BedrockUnifiedClient(**kwargs)
+            from .openrouter_model import OpenRouterClient
+            print("🔄 Using OpenRouter as LLM provider")
+            return OpenRouterClient(**kwargs)
         except Exception as e:
-            raise ValueError(f"Failed to initialize any LLM client: {e}")
+            print(f"⚠️  OpenRouter initialization failed: {e}")
+            # Fall back to AWS Bedrock only if OpenRouter fails
+            if os.environ.get("AWS_ACCESS_KEY_ID") or os.environ.get("AWS_PROFILE"):
+                print("🔄 Falling back to AWS Bedrock")
+                try:
+                    from .aws_model import BedrockUnifiedClient
+                    return BedrockUnifiedClient(**kwargs)
+                except Exception as bedrock_e:
+                    raise ValueError(f"Failed to initialize any LLM client. OpenRouter: {e}, Bedrock: {bedrock_e}")
+            else:
+                raise ValueError(f"Failed to initialize LLM client: {e}")
 
 
 def get_default_model(provider: Optional[str] = None) -> str:
@@ -92,13 +88,8 @@ def get_default_model(provider: Optional[str] = None) -> str:
     if provider is None:
         provider = os.environ.get("LLM_PROVIDER", "").lower()
 
-    # Check for OpenRouter
-    if provider == "openrouter" or os.environ.get("OPENROUTER_API_KEY"):
-        # Default to Claude 3.5 Sonnet on OpenRouter
-        return "claude-3.5-sonnet"
-    else:
-        # Default to Claude 4 Sonnet on Bedrock
-        return "claude-4-sonnet"
+    # Default to Claude 4 Sonnet for both providers
+    return "claude-4-sonnet"
 
 
 # Convenience aliases

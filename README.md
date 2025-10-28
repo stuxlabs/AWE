@@ -15,21 +15,19 @@ Memory-augmented multi-agent system for intelligent XSS and SQL injection detect
 ### Simplified Docker Runner (Recommended)
 
 ```bash
-# Set up LLM provider (choose one)
-export OPENROUTER_API_KEY="your_openrouter_key"  # OR
-export AWS_ACCESS_KEY_ID="your_key"
-export AWS_SECRET_ACCESS_KEY="your_secret"
+# Set up OpenRouter API key
+export OPENROUTER_API_KEY="your_openrouter_key"
 
 # Run with simple script
-./run-docker.sh "https://target.com" --sqli
-./run-docker.sh "https://target.com" --dom
+./run-docker.sh "https://target.com" --openrouter --sqli
+./run-docker.sh "https://target.com" --openrouter --dom
 
-# Use OpenRouter with custom model
+# Use custom model
 ./run-docker.sh "https://target.com" --openrouter --model gpt-4o --sqli
 ./run-docker.sh "https://target.com" --openrouter --model gemini-2-flash --dom
 
 # With all features enabled
-./run-docker.sh "https://target.com" --openrouter --model claude-3.5-sonnet --sqli --memory --reasoning-mode verbose
+./run-docker.sh "https://target.com" --openrouter --sqli --memory --reasoning-mode verbose
 ```
 
 ### Docker (Manual)
@@ -37,12 +35,16 @@ export AWS_SECRET_ACCESS_KEY="your_secret"
 ```bash
 docker build -t awe .
 
+export OPENROUTER_API_KEY="your_key"
+
 # XSS Detection
-docker run --rm -v $(pwd)/screenshots:/app/screenshots \
+docker run --rm -e OPENROUTER_API_KEY=$OPENROUTER_API_KEY \
+  -v $(pwd)/screenshots:/app/screenshots \
   awe python main.py "https://target.com" --dom --use-framework
 
 # SQL Injection
-docker run --rm awe python main.py "https://target.com/page.php?id=1" --sqli
+docker run --rm -e OPENROUTER_API_KEY=$OPENROUTER_API_KEY \
+  awe python main.py "https://target.com/page.php?id=1" --sqli
 ```
 
 ### Local
@@ -51,32 +53,22 @@ docker run --rm awe python main.py "https://target.com/page.php?id=1" --sqli
 pip install -r requirements.txt
 playwright install chromium
 
-export AWS_ACCESS_KEY_ID=your_key
-export AWS_SECRET_ACCESS_KEY=your_secret
-export AWS_REGION=us-east-1
+export OPENROUTER_API_KEY="your_key"
 
 python main.py "https://target.com" --dom --use-framework
 python main.py "https://target.com/page.php?id=1" --sqli
 ```
 
-## LLM Providers
+## LLM Provider Setup
 
-AWE supports both **AWS Bedrock** and **OpenRouter** for LLM-powered payload generation.
+AWE uses **OpenRouter** for LLM-powered payload generation, giving you access to multiple AI models through a single API.
 
-### AWS Bedrock (Default)
-```bash
-export AWS_ACCESS_KEY_ID="your_key"
-export AWS_SECRET_ACCESS_KEY="your_secret"
-export AWS_REGION="us-east-1"
+### Setup
 
-./run-docker.sh "https://target.com" --sqli
-```
-
-### OpenRouter
 ```bash
 export OPENROUTER_API_KEY="your_key"
 
-# Use default model (claude-3.5-sonnet)
+# Use default model (claude-4-sonnet)
 ./run-docker.sh "https://target.com" --openrouter --sqli
 
 # Specify custom model
@@ -85,36 +77,31 @@ export OPENROUTER_API_KEY="your_key"
 ./run-docker.sh "https://target.com" --openrouter --model llama3.1-70b --sqli
 ```
 
-**Available OpenRouter Models:**
-- `claude-3.5-sonnet` (default) - Best for security testing
+### Available Models
+
+- `claude-4-sonnet` (default) - Most advanced Claude model for security testing
+- `claude-3.5-sonnet` - Fast and reliable for complex analysis
 - `gpt-4o` - Excellent at understanding complex contexts
 - `gemini-2-flash` - Fast and cost-effective
 - `llama3.1-8b`, `llama3.1-70b`, `llama3.1-405b` - Open source options
 - `deepseek-chat`, `qwen-2.5-72b` - Alternative models
 
-See `OPENROUTER_MODELS.md` for full model list.
+See `OPENROUTER_MODELS.md` for full model list and pricing.
 
 ## Usage
 
 ```bash
-# XSS Detection (DOM, Reflected, Stored, Blind)
-python main.py "https://target.com" --dom --use-framework
-python main.py "https://target.com" --proxy
-python main.py "https://target.com" --oast-mode auto
-
-# SQL Injection (Error, Time, Boolean, UNION)
-python main.py "https://target.com/page?id=1" --sqli
-python main.py "https://target.com/page?id=1" --sqli --sqli-config aggressive
-
-# With Reasoning Transparency
-python main.py "https://target.com" --dom --reasoning-mode verbose
-
 # Using run-docker.sh (recommended)
-./run-docker.sh "https://target.com" --sqli                    # Basic SQLi scan
-./run-docker.sh "https://target.com" --dom                     # Basic XSS scan
-./run-docker.sh "https://target.com" --sqli --memory           # With memory enabled
-./run-docker.sh "https://target.com" --sqli --reasoning-mode verbose  # With reasoning
-./run-docker.sh "https://target.com" --openrouter --model gpt-4o --sqli  # OpenRouter with custom model
+./run-docker.sh "https://target.com" --openrouter --sqli                    # Basic SQLi scan
+./run-docker.sh "https://target.com" --openrouter --dom                     # Basic XSS scan
+./run-docker.sh "https://target.com" --openrouter --sqli --memory           # With memory enabled
+./run-docker.sh "https://target.com" --openrouter --sqli --reasoning-mode verbose  # With reasoning
+./run-docker.sh "https://target.com" --openrouter --model gpt-4o --sqli     # Custom model
+
+# Direct python usage
+python main.py "https://target.com" --dom --use-framework
+python main.py "https://target.com" --sqli --sqli-config aggressive
+python main.py "https://target.com" --dom --reasoning-mode verbose
 ```
 
 ## Configuration Presets
@@ -127,9 +114,7 @@ python main.py "https://target.com" --dom --reasoning-mode verbose
 - Python 3.8+
 - Playwright
 - SQLite3
-- LLM Provider (choose one):
-  - AWS Bedrock access (Claude, Llama models) **OR**
-  - OpenRouter API key (Claude, GPT, Gemini, Llama, and more)
+- OpenRouter API key (access to Claude, GPT, Gemini, Llama, and more)
 - Nuclei (optional)
 
 ## ⚠️ Legal Warning
@@ -152,8 +137,3 @@ This tool is designed for:
 ## License
 
 MIT License
-
-## Contact
-
-- Ashish Baghel: ashishashish7440@gmail.com
-- Akshat Singh Jaswal: sja.akshat@gmail.com

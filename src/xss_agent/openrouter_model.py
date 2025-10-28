@@ -56,6 +56,12 @@ class OpenRouterClient:
                 type=ModelType.VISION,
                 max_tokens=4096
             ),
+            "claude-4-sonnet": ModelConfig(
+                id="anthropic/claude-sonnet-4-20250514",
+                name="Claude 4 Sonnet",
+                type=ModelType.VISION,
+                max_tokens=8192
+            ),
             # Meta Llama Models
             "llama3.1-8b": ModelConfig(
                 id="meta-llama/llama-3.1-8b-instruct",
