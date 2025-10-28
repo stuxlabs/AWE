@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  stuxlab:
+    build: .
+    container_name: stuxlab
+    volumes:
+      - ./screenshots:/app/screenshots
+      - ./logs:/app/logs
+      - ./logs/reasoning:/app/logs/reasoning
+      - ./memory:/app/memory
+      - ./results:/app/results
+      - ./html_captures:/app/html_captures
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - LLM_PROVIDER=${LLM_PROVIDER}
+      - LLM_MODEL=${LLM_MODEL}
+    command: ["python", "main.py", "${TARGET_URL:-http://testphp.vulnweb.com/search.php?test=query}", "--dom"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - stuxlab-network
+
+  nuclei:
+    image: projectdiscovery/nuclei:latest
+    container_name: nuclei-scanner
+    volumes:
+      - ./nuclei-templates:/app/nuclei-templates
+      - ./nuclei-output:/app/output
+    networks:
+      - stuxlab-network
+    profiles:
+      - nuclei-standalone
+
+networks:
+  stuxlab-network:
+    driver: bridge

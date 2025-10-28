@@ -1,0 +1,21 @@
+# Additional requirements for ProxyAgent integration
+# Add these to your existing requirements.txt
+
+# HTTP proxy and traffic capture
+mitmproxy>=10.0.0         # HTTP/S proxy with programmatic API
+httpx>=0.25.0             # Modern HTTP client for request replay
+
+# Testing dependencies (development only)
+pytest>=7.0.0             # Unit testing framework
+pytest-asyncio>=0.21.0    # Async test support
+pytest-mock>=3.10.0       # Enhanced mocking capabilities
+
+# Optional: Enhanced logging and monitoring
+structlog>=23.0.0         # Structured logging for better analysis
+rich>=13.0.0              # Rich terminal output for debugging
+
+# Note: These are in addition to existing requirements:
+# - playwright
+# - agno
+# - boto3 (for AWS Bedrock)
+# - docker (for containerized environments)

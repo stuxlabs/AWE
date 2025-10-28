@@ -1,0 +1,24 @@
+logs/
+*.pdf
+*.html
+*.json
+
+proxy_captures/
+__pycache__/
+html_captures/
+venv/
+screenshots/
+results/
+.env
+mitm_logs/
+
+# Exclude result/session files but keep database
+*_results.json
+*_session_*.json
+config.json
+
+# Keep payload database
+!src/xss_agent/analysis_framework/payloads_db.json
+
+# Git worktrees
+.worktrees/

