@@ -1,0 +1,53 @@
+# Runtime directories
+logs/
+proxy_captures/
+html_captures/
+screenshots/
+results/
+mitm_logs/
+memory/
+.output/
+
+# Environment
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+
+# Generated files
+*.pdf
+*.png
+*.html
+*_results.json
+*_session_*.json
+config.json
+*.restore
+cookies.txt
+
+# Keep payload database
+!src/xss_agent/analysis_framework/payloads_db.json
+
+# Large wordlists
+src/credential_agent/wordlists/rockyou.txt
+
+# Git worktrees
+.worktrees/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

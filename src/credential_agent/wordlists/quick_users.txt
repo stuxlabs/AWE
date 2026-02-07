@@ -1,0 +1,13 @@
+demo
+sa
+test
+webadmin
+user
+administrator
+mysql
+tomcat
+guest
+postgres
+root
+manager
+admin
