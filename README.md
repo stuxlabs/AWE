@@ -1,10 +1,18 @@
 # AWE: Adaptive Agents for Dynamic Web Penetration Testing
 
-This repository contains the source code for our paper:
+<p align="center">
+  <b>Akshat Singh Jaswal</b> · <b>Ashish Baghel</b><br>
+  <i>Accepted at NDSS LAST-X 2026</i>
+</p>
 
-> **AWE: Adaptive Agents for Dynamic Web Penetration Testing**
-> Akshat Singh Jaswal and Ashish Baghel
-> *NDSS LAST-X 2026*
+<p align="center">
+  <a href="https://arxiv.org/abs/2603.00960">
+    <img src="https://img.shields.io/badge/arXiv-2603.00960-b31b1b.svg" />
+  </a>
+  <a href="https://www.ndss-symposium.org/ndss-paper/auto-draft-680/">
+    <img src="https://img.shields.io/badge/NDSS-Proceedings%202026-blue.svg" />
+  </a>
+</p>
 
 ## Abstract
 
@@ -46,5 +54,10 @@ src/
 ## Citation
 
 ```bibtex
--Proceedings to appear - NDSS LAST-X 2026
+@article{jaswal2026awe,
+  title={AWE: Adaptive Agents for Dynamic Web Penetration Testing},
+  author={Jaswal, Akshat Singh and Baghel, Ashish},
+  journal={arXiv preprint arXiv:2603.00960},
+  year={2026}
+}
 ```
